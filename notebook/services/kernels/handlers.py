@@ -323,6 +323,9 @@ class ZMQChannelsHandler(AuthenticatedZMQStreamHandler):
         channel = getattr(stream, 'channel', None)
         msg_type = msg['header']['msg_type']
 
+        if msg_type == 'execute_input':
+            self.log.critical("TRAK: user '%s' execute at %s", msg['header']['username'], msg['header']['date'])
+
         if channel == 'iopub' and msg_type == 'status' and msg['content'].get('execution_state') == 'idle':
             # reset rate limit counter on status=idle,
             # to avoid 'Run All' hitting limits prematurely.
